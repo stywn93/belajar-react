@@ -1,9 +1,16 @@
 import { createRoot } from "react-dom/client";
-import { HeaderHelloWorld, ParagraphHelloWorld } from "./HelloWorld.jsx";
+import HW from "./HelloWorld.jsx";
+import Container from "../container/Container.jsx";
+import { StrictMode } from "react";
+import TodoList from "../todo-list/TodoList.jsx";
 
 createRoot(document.getElementById("root")).render(
   <>
-    <HeaderHelloWorld />
-    <ParagraphHelloWorld />
+    <StrictMode>
+      <Container>
+        <HW/>
+        <TodoList/>
+      </Container>
+    </StrictMode>
   </>
 );
