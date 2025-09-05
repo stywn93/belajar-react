@@ -1,15 +1,7 @@
 export default function Todo({ text, isCompleted, isDeleted }) {
-  if(isDeleted){
+  if (isDeleted) {
     return null
-  }else if (isCompleted) {
-    return(
-      <li>
-        <del>{text}</del>
-      </li>
-    )
-  } else{
-    return(
-      <li>{text}</li>
-    )
+  } else {
+    return <li>{isCompleted ? `${text} ✅` : text}</li> //contoh menggunakan ternary operator agar lebih ringkas
   }
 }
