@@ -1,17 +1,83 @@
-import NoteList from "./NoteList"
-import NoteForm from "./NoteForm"
-import { useImmer } from "use-immer"
+import NoteList from "./NoteList";
+import NoteForm from "./NoteForm";
+import { useImmer, useImmerReducer } from "use-immer";
+import { act, useReducer } from "react";
 
-let id = 0
+let id = 0;
 const initialNotes = [
-  {id: id++, text: "Learn HTML", done:true},
-  {id: id++, text: "Learn CSS", done:true},
-  {id: id++, text: "Learn JS", done:true},
-  {id: id++, text: "Learn React", done:false},
-]
-export default function NoteApp() {
-  const [notes, setNotes] = useImmer(initialNotes)
+  { id: id++, text: "Learn HTML", done: true },
+  { id: id++, text: "Learn CSS", done: true },
+  { id: id++, text: "Learn JS", done: true },
+  { id: id++, text: "Learn React", done: false },
+];
+/*
+function notesReducer(notes, action){
+  switch (action.type) {
+    case "ADD_NOTE":
+      return[
+        ...notes,
+        {
+          id: id++,
+          text: action.text,
+          done: false
+        }
+      ]
+    case "CHANGE_NOTE":
+      return notes.map((note) => note.id === action.id ? {...note, text : action.text, done:action.done} : note)
+    case "DELETE_NOTE":
+      return notes.filter(note => note.id !== action.id)
+    default:
+      return notes
+  }
+}
+*/
 
+function notesReducer(draft, action) {
+  if(action.type === "ADD_NOTE"){
+    draft.push({
+      id: id++,
+      text: action.text,
+      done: false,
+    })
+  } else if(action.type === "CHANGE_NOTE"){
+    const i = draft.findIndex(note => note.id === action.id)
+    draft[i].text = action.text
+    draft[i].done = action.done
+  } else if(action.type === "DELETE_NOTE"){
+    const i = draft.findIndex(note => note.id === action.id)
+    draft.splice(i, 1)
+  }
+}
+
+export default function NoteApp() {
+  // const [notes, setNotes] = useImmer(initialNotes)
+  // const [notes, dispatch] = useReducer(notesReducer, initialNotes)
+  const [notes, dispatch] = useImmerReducer(notesReducer, initialNotes);
+
+  //ini adalah approach jika menggunakan useReducer
+  function handleAddNote(text) {
+    dispatch({
+      type: "ADD_NOTE",
+      text: text,
+    });
+  }
+
+  function handleChangeNote(note) {
+    dispatch({
+      type: "CHANGE_NOTE",
+      ...note,
+    });
+  }
+
+  function handleDeleteNote(note) {
+    dispatch({
+      type: "DELETE_NOTE",
+      id: note.id,
+    });
+  }
+
+  /**
+   * ini adalah function jika menggunakan useState
   function handleAddNote(text) {
     setNotes((draft) => {
       draft.push({
@@ -36,11 +102,18 @@ export default function NoteApp() {
     });
   }
 
+
+  */
+
   return (
     <>
       <h1>Note App</h1>
-      <NoteForm onAddNote = {handleAddNote}></NoteForm>
-      <NoteList notes={notes} onChange={handleChangeNote} onDelete={handleDeleteNote}/>
+      <NoteForm onAddNote={handleAddNote}></NoteForm>
+      <NoteList
+        notes={notes}
+        onChange={handleChangeNote}
+        onDelete={handleDeleteNote}
+      />
     </>
   );
 }
