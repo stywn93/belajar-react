@@ -33,19 +33,29 @@ function notesReducer(notes, action){
 */
 
 function notesReducer(draft, action) {
-  if(action.type === "ADD_NOTE"){
-    draft.push({
-      id: id++,
-      text: action.text,
-      done: false,
-    })
-  } else if(action.type === "CHANGE_NOTE"){
-    const i = draft.findIndex(note => note.id === action.id)
-    draft[i].text = action.text
-    draft[i].done = action.done
-  } else if(action.type === "DELETE_NOTE"){
-    const i = draft.findIndex(note => note.id === action.id)
-    draft.splice(i, 1)
+  switch (action.type) {
+    case "ADD_NOTE": {
+      draft.push({
+        id: id++,
+        text: action.text,
+        done: false,
+      });
+      break;
+    }
+    case "CHANGE_NOTE": {
+      const i = draft.findIndex((note) => note.id === action.id);
+      draft[i].text = action.text;
+      draft[i].done = action.done;
+      break;
+    }
+    case "DELETE_NOTE": {
+      const i = draft.findIndex((note) => note.id === action.id);
+      draft.splice(i, 1);
+      break;
+    }
+    default: {
+      break;
+    }
   }
 }
 
