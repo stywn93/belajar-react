@@ -2,6 +2,7 @@ import NoteList from "./NoteList";
 import NoteForm from "./NoteForm";
 import { useImmer, useImmerReducer } from "use-immer";
 import { act, useReducer } from "react";
+import { NotesContext, NotesDispatchContext } from "./NoteContext";
 
 let id = 0;
 const initialNotes = [
@@ -65,6 +66,7 @@ export default function NoteApp() {
   const [notes, dispatch] = useImmerReducer(notesReducer, initialNotes);
 
   //ini adalah approach jika menggunakan useReducer
+  /*
   function handleAddNote(text) {
     dispatch({
       type: "ADD_NOTE",
@@ -85,6 +87,7 @@ export default function NoteApp() {
       id: note.id,
     });
   }
+  */
 
   /**
    * ini adalah function jika menggunakan useState
@@ -117,13 +120,13 @@ export default function NoteApp() {
 
   return (
     <>
-      <h1>Note App</h1>
-      <NoteForm onAddNote={handleAddNote}></NoteForm>
-      <NoteList
-        notes={notes}
-        onChange={handleChangeNote}
-        onDelete={handleDeleteNote}
-      />
+      <NotesContext.Provider value={notes}>
+        <NotesDispatchContext.Provider value={dispatch}>
+          <h1>Note App</h1>
+          <NoteForm></NoteForm>
+          <NoteList notes={notes} />
+        </NotesDispatchContext.Provider>
+      </NotesContext.Provider>
     </>
   );
 }
