@@ -4,7 +4,5 @@ import Timer from "./Timer"
 
 createRoot(document.getElementById("root"))
 .render(
-<StrictMode>
     <Timer/>
-  </StrictMode>
 )
