@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { produce } from "immer"
+import LapList from "./LapList"
 
 export default function Timer() {
   const [start, setStart] = useState(null)
@@ -7,11 +8,12 @@ export default function Timer() {
   const [elapsed, setElapsed] = useState(0)
   const timer = useRef(null)
   const [text, setText] = useState("Start")
-  const timeRecord = []
+  const [laps, setLaps] = useState([])
 
   function handleLap(){
     const lapTime = elapsed + now - start
     console.info(`Lap : ${lapTime} ms`)
+    setLaps(prev => [...prev, lapTime])
   }
 
   function handleStart() {
@@ -60,6 +62,7 @@ export default function Timer() {
       <button onClick={handleLap} disabled={start === null}>Lap</button>
       <button onClick={text == "Start" ? handleStart : handleStop}>{text}</button>
       <button onClick={handleReset} disabled={elapsed === 0 && start === null}>Reset</button>
+      <LapList laps={laps} />
     </>
   );
 }
