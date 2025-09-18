@@ -1,5 +1,4 @@
 import { useRef, useState } from "react"
-import { produce } from "immer"
 import LapList from "./LapList"
 
 export default function Timer() {
